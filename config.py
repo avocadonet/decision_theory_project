@@ -11,9 +11,9 @@ RESULTS_DIR = BASE_DIR / "results"
 FIRST_GAME_RESULTS_DIR = RESULTS_DIR / "first_game"
 SECOND_GAME_RESULTS_DIR = RESULTS_DIR / "second_game"
 
-N_STUDENTS = 5
-M_COURSES = 3
-K_COURSES = 2
+N_STUDENTS = 350
+M_COURSES = 8
+K_COURSES = 8
 RANDOM_SEED = 42    
 
 def ensure_directories():

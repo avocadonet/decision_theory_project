@@ -13,7 +13,7 @@ def calculate_course_utility(
 ) -> float:
     return (
         beta_i * w_ij * a_j
-        + w_ij * d_j * (1 - beta_i)
+        + (1 - beta_i) * w_ij * d_j
         - p_i * lambda_value * sigma_j
     )
 
@@ -21,7 +21,6 @@ def calculate_course_utility(
 def generate_total_utility_matrix(
     data_dir: str = "data",
     output_file: str = "data/total_utility.csv",
-    lambda_value: float = 1.0
 ):
     data_path = Path(data_dir)
 
@@ -31,12 +30,14 @@ def generate_total_utility_matrix(
     student_laziness = pd.read_csv(data_path / "student_laziness.csv")
     importance_certainty = pd.read_csv(data_path / "importance_certainty.csv")
     exchange_rate_uncertainty = pd.read_csv(data_path / "exchange_rate_uncertainty.csv")
+    student_certainty_weight = pd.read_csv(data_path / "student_certainty_weight.csv")
 
     df = usefulness_course.merge(quality_teaching, on="course_id", how="left")
     df = df.merge(ease_passing_exam, on="course_id", how="left")
     df = df.merge(student_laziness, on="student_id", how="left")
     df = df.merge(importance_certainty, on="student_id", how="left")
     df = df.merge(exchange_rate_uncertainty, on="course_id", how="left")
+    df = df.merge(student_certainty_weight, on="student_id", how="left")
 
     df["total_utility"] = df.apply(
         lambda row: calculate_course_utility(
@@ -45,7 +46,7 @@ def generate_total_utility_matrix(
             a_j=row["quality_teaching"],
             d_j=row["ease_passing_exam"],
             p_i=row["importance_certainty"],
-            lambda_value=lambda_value,
+            lambda_value=row["student_certainty_weight"],
             sigma_j=row["exchange_rate_uncertainty"]
         ),
         axis=1
@@ -58,6 +59,3 @@ def generate_total_utility_matrix(
     )
 
     total_utility_matrix.to_csv(output_file)
-
-if __name__ == "__main__":
-    generate_total_utility_matrix()
