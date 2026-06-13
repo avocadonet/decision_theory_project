@@ -89,12 +89,16 @@ def generate_initial_data():
         "random_seed": seed
     }]).to_csv(output_path / "meta.csv", index=False)
 
-    # 9) student_certainty_weight: вектор n
     pd.DataFrame({
         "student_id": student_ids,
         "student_certainty_weight": np.round(rng.uniform(0, 1, size=n), 4)
     }).to_csv(output_path / "student_certainty_weight.csv", index=False)
-    
+
+    pd.DataFrame({
+        "student_id": student_ids,
+        "rating": np.round(rng.uniform(0, 1, size=n), 4)
+    }).to_csv(output_path / "student_rating.csv", index=False)
+        
     print(f"Data generated in: {output_path.resolve()}")
     print("Created files:")
     for file in sorted(output_path.glob("*.csv")):

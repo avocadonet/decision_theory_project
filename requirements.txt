@@ -4,3 +4,4 @@ cvxpy>=1.5
 pandas>=2.2
 matplotlib>=3.8
 pytest>=8.2
+seaborn>=0.12
